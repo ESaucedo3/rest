@@ -7,7 +7,8 @@ export class MissionsController extends BaseController {
     this.router
       .get("", this.getMissions)
       .post("", this.createMission)
-      .put("/:missionId", this.updateMission);
+      .put("/:missionId", this.updateMission)
+      .delete("/:missionId", this.deleteMission);
   }
 
   async getMissions(req, res, next) {
@@ -38,6 +39,16 @@ export class MissionsController extends BaseController {
         missionData
       );
       res.send(updatedMission);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async deleteMission(req, res, next) {
+    try {
+      const missionId = req.params.missionId;
+      const deletedMission = await missionsService.deleteMission(missionId);
+      res.send(deletedMission);
     } catch (e) {
       next(e);
     }
