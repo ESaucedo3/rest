@@ -4,7 +4,10 @@ import BaseController from "../utils/BaseController.js";
 export class MissionsController extends BaseController {
   constructor() {
     super("api/missions");
-    this.router.get("", this.getMissions).post("", this.createMission);
+    this.router
+      .get("", this.getMissions)
+      .post("", this.createMission)
+      .put("/:missionId", this.updateMission);
   }
 
   async getMissions(req, res, next) {
@@ -21,6 +24,20 @@ export class MissionsController extends BaseController {
       const missionData = req.body;
       const mission = await missionsService.createMission(missionData);
       res.send(mission);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async updateMission(req, res, next) {
+    try {
+      const missionId = req.params.missionId;
+      const missionData = req.body;
+      const updatedMission = await missionsService.updateMission(
+        missionId,
+        missionData
+      );
+      res.send(updatedMission);
     } catch (e) {
       next(e);
     }
